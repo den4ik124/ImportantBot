@@ -2,7 +2,7 @@
   "profiles": {
     "ImportantBot": {
       "commandName": "Project",
-      "commandLineArgs": "--port 8443 --useHttps --cors * --cert C:\\Windows\\System32\\certificate.pfx --password 123",
+      "commandLineArgs": "--port 8443", // --useHttps --cors * --cert C:\\Windows\\System32\\certificate.pfx --password 123",
       "launchBrowser": false
     }
   }

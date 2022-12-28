@@ -8,12 +8,10 @@ namespace ImportantBot.Core
     public class RequestHandler
     {
         private readonly HttpRequest _request;
-        private readonly ILogger<RequestHandler> _logger;
 
-        public RequestHandler(HttpRequest request, ILogger logger)
+        public RequestHandler(HttpRequest request)
         {
             _request = request;
-            _logger = logger as ILogger<RequestHandler>;
         }
 
         public async Task<ResponseDto> Handle()
@@ -40,7 +38,6 @@ namespace ImportantBot.Core
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 return new ResponseDto()
                 {
                     IsSuccess = false,

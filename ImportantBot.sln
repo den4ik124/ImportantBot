@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImportantBot.Core", "Import
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportantBot.Sender", "ImportantBot.Sender\ImportantBot.Sender.csproj", "{15CB939B-D37E-4890-A85B-01905390C4EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportantBot.Data", "ImportantBot.Data\ImportantBot.Data.csproj", "{EF3119CC-336F-428F-9FD1-C66A78F0BD07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{15CB939B-D37E-4890-A85B-01905390C4EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15CB939B-D37E-4890-A85B-01905390C4EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15CB939B-D37E-4890-A85B-01905390C4EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF3119CC-336F-428F-9FD1-C66A78F0BD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF3119CC-336F-428F-9FD1-C66A78F0BD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF3119CC-336F-428F-9FD1-C66A78F0BD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF3119CC-336F-428F-9FD1-C66A78F0BD07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

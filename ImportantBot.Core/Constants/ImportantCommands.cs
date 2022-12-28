@@ -4,7 +4,6 @@
     {
         public static IEnumerable<string> Commands { get; set; } = new List<string>()
         {
-            "#",
             "#важное",
             "#вопрос",
         };
