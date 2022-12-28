@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "BotStarterFunction": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7104 --useHttps --cors * --cert C:\\Windows\\System32\\certificate.pfx --password 123",
-      "launchBrowser": false
-    }
-  }
-}
