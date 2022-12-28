@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ImportantBot.Sender": {
+      "commandName": "Project",
+      "commandLineArgs": "func host start --port 7240 --useHttps --cert C:\\Windows\\System32\\certificate.pfx --password 123",
+      "launchBrowser": false
+    }
+  }
+}
