@@ -5,7 +5,6 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace ImportantBot.Core
 {
@@ -57,6 +56,8 @@ namespace ImportantBot.Core
                 switch (messageText)
                 {
                     case ImportantBotConstants.Important:
+                    case ImportantBotConstants.ImportantChat:
+                    case ImportantBotConstants.ImportantGroup:
                         var messages = await _context.GetMessages<MessageModel>(chatId);
                         var responseText = new StringBuilder();
                         var index = 1;
@@ -68,8 +69,9 @@ namespace ImportantBot.Core
 
                         await _botClient.SendTextMessageAsync(chatId: update.Message.From.Id,
                                                                 text: responseText.ToString(),
-                                                                //replyMarkup: new ReplyKeyboardRemove(),//Commands.GetCommandButtons(),
+                                                                replyMarkup: Commands.GetCommandButtons(),
                                                                 cancellationToken: cancellationToken);
+                        await _botClient.DeleteMessageAsync(chatId, update.Message.MessageId, cancellationToken);
                         break;
 
                     default:
