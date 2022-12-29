@@ -15,6 +15,7 @@ public static class Commands
         return new ReplyKeyboardMarkup(commandButtons)
         {
             ResizeKeyboard = true,
+            OneTimeKeyboard = true,
         };
     }
 
@@ -23,7 +24,7 @@ public static class Commands
         var inlineButtonsList = new List<List<InlineKeyboardButton>>();
         var buttonsList = new List<InlineKeyboardButton>()
         {
-            InlineKeyboardButton.WithCallbackData(text: ImportantBotConstants.Important, callbackData: ImportantBotConstants.Important),
+            InlineKeyboardButton.WithCallbackData(ImportantBotConstants.Important),
         };
         inlineButtonsList.Add(buttonsList);
         return new InlineKeyboardMarkup(inlineButtonsList);

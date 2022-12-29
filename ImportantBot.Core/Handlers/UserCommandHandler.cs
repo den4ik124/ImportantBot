@@ -5,6 +5,7 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace ImportantBot.Core
 {
@@ -28,8 +29,8 @@ namespace ImportantBot.Core
             // Only process Message updates: https://core.telegram.org/bots/api#message
             // Only process text messages
 
-            if (update.Type != UpdateType.Message && update.Message!.Type != MessageType.Text)
-                return;
+            if (update.Type != UpdateType.Message) return;
+            if (update.Message.Type != MessageType.Text) return;
 
             var chatId = update.Message!.Chat.Id;
             var messageText = update.Message.Text;
@@ -65,10 +66,10 @@ namespace ImportantBot.Core
                             index++;
                         }
 
-                        await _botClient.SendTextMessageAsync(chatId: chatId,
-                                                        text: responseText.ToString(),
-                                                        replyMarkup: Commands.GetCommandButtons(),
-                                                        cancellationToken: cancellationToken);
+                        await _botClient.SendTextMessageAsync(chatId: update.Message.From.Id,
+                                                                text: responseText.ToString(),
+                                                                //replyMarkup: new ReplyKeyboardRemove(),//Commands.GetCommandButtons(),
+                                                                cancellationToken: cancellationToken);
                         break;
 
                     default:
