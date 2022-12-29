@@ -4,5 +4,7 @@
     {
         internal const string StartCommand = "/start";
         internal const string StopCommand = "/stop";
+
+        public const string Important = "Важные";
     }
 }

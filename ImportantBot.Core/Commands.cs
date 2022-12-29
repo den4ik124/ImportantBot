@@ -1,31 +1,31 @@
-﻿using Telegram.Bot.Types.ReplyMarkups;
+﻿using ImportantBot.Core.Constants;
+using Telegram.Bot.Types.ReplyMarkups;
 
-namespace ImportantBot.Core
+namespace ImportantBot.Core;
+
+public static class Commands
 {
-    public static class Commands
+    public static IReplyMarkup GetCommandButtons()
     {
-        public static IReplyMarkup GetCommandButtons()
+        var commandButtons = new[]
         {
-            var commandButtons = new[]
-            {
-                new [] {new KeyboardButton("Важные")},
-            };
+            new [] {new KeyboardButton(ImportantBotConstants.Important)},
+        };
 
-            return new ReplyKeyboardMarkup(commandButtons)
-            {
-                ResizeKeyboard = true,
-            };
-        }
-
-        public static IReplyMarkup GetInlineCommandButtons()
+        return new ReplyKeyboardMarkup(commandButtons)
         {
-            var inlineButtonsList = new List<List<InlineKeyboardButton>>();
-            var buttonsList = new List<InlineKeyboardButton>()
-            {
-                InlineKeyboardButton.WithCallbackData(text: "Важные", callbackData: "Важные"),
-            };
-            inlineButtonsList.Add(buttonsList);
-            return new InlineKeyboardMarkup(inlineButtonsList);
-        }
+            ResizeKeyboard = true,
+        };
+    }
+
+    public static IReplyMarkup GetInlineCommandButtons()
+    {
+        var inlineButtonsList = new List<List<InlineKeyboardButton>>();
+        var buttonsList = new List<InlineKeyboardButton>()
+        {
+            InlineKeyboardButton.WithCallbackData(text: ImportantBotConstants.Important, callbackData: ImportantBotConstants.Important),
+        };
+        inlineButtonsList.Add(buttonsList);
+        return new InlineKeyboardMarkup(inlineButtonsList);
     }
 }

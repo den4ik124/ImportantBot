@@ -1,5 +1,6 @@
 ﻿using ImportantBot.Core.Constants;
 using ImportantBot.Data;
+using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
@@ -25,10 +26,9 @@ namespace ImportantBot.Core
         public async Task HandleUpdateAsync(Update update, CancellationToken cancellationToken)
         {
             // Only process Message updates: https://core.telegram.org/bots/api#message
-            if (update.Type != UpdateType.Message)
-                return;
             // Only process text messages
-            if (update.Message.Type != MessageType.Text)
+
+            if (update.Type != UpdateType.Message && update.Message.Type != MessageType.Text)
                 return;
 
             var chatId = update.Message.Chat.Id;
@@ -42,21 +42,31 @@ namespace ImportantBot.Core
                     var message = new MessageModel()
                     {
                         UserId = update.Message.From.Id,
-                        UserName = $"{update.Message.From.FirstName} {update.Message.From.LastName}",
-                        Link = "",
-                        Text = messageText
+                        FullName = $"{update.Message.From.FirstName} {update.Message.From.LastName}",
+                        UserName = update.Message.From.Username,
+                        Link = update.Message.MessageId.ToString(),
+                        Text = messageText,
+                        DateTime = update.Message.Date,
+                        ChatId = update.Message.Chat.Id
                     };
                     await _context.InsertData(message);
-                    //await AddMessageToDatabase(update.Message);
                     return;
                 }
 
                 switch (messageText)
                 {
-                    case "Важное":
-                        var messages = "Some important messages here for the last 24 hours";
+                    case ImportantBotConstants.Important:
+                        var messages = await _context.GetMessages(chatId);
+
+                        var responseText = new StringBuilder();
+
+                        for (int i = 0; i < messages.Count; i++)
+                        {
+                            responseText.AppendLine($"{i+1}. {messages[i].ToString()}");
+                        }
+
                         await _botClient.SendTextMessageAsync(chatId: chatId,
-                                                        text: messages,
+                                                        text: responseText.ToString(),
                                                         replyMarkup: Commands.GetCommandButtons(),
                                                         cancellationToken: cancellationToken);
                         break;
@@ -70,32 +80,6 @@ namespace ImportantBot.Core
                 throw ex;
             }
         }
-
-        //private async Task AddMessageToDatabase(Message message)
-        //{
-        //    var connectionString = new SqlConnectionStringBuilder()
-        //    {
-        //        DataSource = @"(localdb)\MSSQLLocalDB",
-        //        InitialCatalog = "ChatMessages",
-        //        IntegratedSecurity = true,
-        //    };
-
-        //    var sqlQuery = "INSERT INTO [ChatMessages].[dbo].[ChatMessages] ([UsedId], [UserName], [MessageLink], [MessageText])\r\n  VALUES (@userId, @userName, @messageLink, @messageText) ";
-
-        //    using (var connection = new SqlConnection(connectionString.ConnectionString))
-        //    {
-        //        await connection.OpenAsync();
-        //        var sqlCommand = new SqlCommand(sqlQuery, connection);
-        //        var parameterId = new SqlParameter("@userId", message.From.Id);
-        //        var parameterUserName = new SqlParameter("@userName", message.From.FirstName + message.From.LastName);
-        //        var parameterMessageLink = new SqlParameter("@messageLink", "");
-        //        var parameterMessage = new SqlParameter("@messageText", message.Text);
-
-        //        sqlCommand.Parameters.AddRange(new[] { parameterId, parameterUserName, parameterMessageLink, parameterMessage });
-
-        //        var numberOfNotes = await sqlCommand.ExecuteNonQueryAsync();
-        //    }
-        //}
 
         public Task HandlePollingErrorAsync(Exception exception, CancellationToken cancellationToken)
         {

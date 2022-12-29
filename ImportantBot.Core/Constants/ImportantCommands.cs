@@ -2,7 +2,7 @@
 {
     public static class ImportantCommands
     {
-        public static IEnumerable<string> Commands { get; set; } = new List<string>()
+        public static IEnumerable<string> Commands { get; } = new List<string>()
         {
             "#важное",
             "#вопрос",
