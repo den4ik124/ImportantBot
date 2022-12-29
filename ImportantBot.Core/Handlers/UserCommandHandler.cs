@@ -10,8 +10,8 @@ namespace ImportantBot.Core
 {
     public class UserCommandHandler
     {
-        private TelegramBotClient _botClient;
-        private DataContext _context;
+        private readonly TelegramBotClient _botClient;
+        private readonly DataContext _context;
 
         public UserCommandHandler()
         {
@@ -28,22 +28,22 @@ namespace ImportantBot.Core
             // Only process Message updates: https://core.telegram.org/bots/api#message
             // Only process text messages
 
-            if (update.Type != UpdateType.Message && update.Message.Type != MessageType.Text)
+            if (update.Type != UpdateType.Message && update.Message!.Type != MessageType.Text)
                 return;
 
-            var chatId = update.Message.Chat.Id;
+            var chatId = update.Message!.Chat.Id;
             var messageText = update.Message.Text;
 
             try
             {
-                if (ImportantCommands.Commands.Any(command => messageText.Contains(command)) && messageText.Length > 1)
+                if (ImportantCommands.Commands.Any(command => messageText!.Contains(command)) && messageText!.Length > 1)
                 {
                     //TODO collect messages here
                     var message = new MessageModel()
                     {
-                        UserId = update.Message.From.Id,
+                        UserId = update.Message.From!.Id,
                         FullName = $"{update.Message.From.FirstName} {update.Message.From.LastName}",
-                        UserName = update.Message.From.Username,
+                        UserName = update.Message.From.Username ?? string.Empty,
                         Link = update.Message.MessageId.ToString(),
                         Text = messageText,
                         DateTime = update.Message.Date,
@@ -56,13 +56,13 @@ namespace ImportantBot.Core
                 switch (messageText)
                 {
                     case ImportantBotConstants.Important:
-                        var messages = await _context.GetMessages(chatId);
-
+                        var messages = await _context.GetMessages<MessageModel>(chatId);
                         var responseText = new StringBuilder();
-
-                        for (int i = 0; i < messages.Count; i++)
+                        var index = 1;
+                        foreach (var message in messages)
                         {
-                            responseText.AppendLine($"{i+1}. {messages[i].ToString()}");
+                            responseText.AppendLine($"{index}. {message.ToString()}");
+                            index++;
                         }
 
                         await _botClient.SendTextMessageAsync(chatId: chatId,
@@ -81,11 +81,11 @@ namespace ImportantBot.Core
             }
         }
 
-        public Task HandlePollingErrorAsync(Exception exception, CancellationToken cancellationToken)
+        public static Task HandlePollingErrorAsync(Exception exception)
         {
-            if (exception is ApiRequestException)
+            if (exception is ApiRequestException ex)
             {
-                var errorMessage = $"Telegram API Error:\n[{((ApiRequestException)exception).ErrorCode}]\n{((ApiRequestException)exception).Message}";
+                var errorMessage = $"Telegram API Error:\n[{ex.ErrorCode}]\n{ex.Message}";
                 Console.WriteLine(errorMessage);
                 return Task.CompletedTask;
             }
